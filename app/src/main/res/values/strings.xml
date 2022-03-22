@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">RecyclerWeather</string>
+
+    <string-array name="cities">
+        <item>Irkutsk</item>
+        <item>Izhevsk</item>
+        <item>Karluk</item>
+        <item>Angarsk</item>
+        <item>Bratsk</item>
+        <item>Moscow</item>
+    </string-array>
 </resources>
