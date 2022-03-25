@@ -12,8 +12,4 @@ class CitiesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         }
     }
-
-    fun bindTo() {
-
-    }
 }
