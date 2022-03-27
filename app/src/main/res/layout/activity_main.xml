@@ -9,10 +9,38 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/layout_block1"
+        android:id="@+id/layout_block0"
         app:layout_constraintTop_toTopOf="parent"
-        android:orientation="horizontal"
-        android:layout_marginTop="150dp">
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/city"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/enter"
+            app:layout_constraintWidth_percent="0.67" />
+        <Button
+            android:id="@+id/enter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="@string/enter"
+            android:gravity="center"
+            android:onClick="onEnterClick"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/city"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.33" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/layout_block1"
+        app:layout_constraintTop_toBottomOf="@+id/layout_block0"
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/weather_icon"
@@ -39,11 +67,46 @@
             app:layout_constraintWidth_percent="0.5" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/layout_block2"
+        app:layout_constraintTop_toBottomOf="@+id/layout_block1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/windspeed"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:textSize="48sp"
+            android:text="@string/no_data"
+            android:gravity="center"
+            android:background="@drawable/border"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/humidity"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintWidth_percent="0.5" />
+        <TextView
+            android:id="@+id/humidity"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:textSize="64sp"
+            android:text="@string/no_data"
+            android:gravity="center"
+            android:background="@drawable/border"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/windspeed"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintWidth_percent="0.5" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cities"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        app:layout_constraintTop_toBottomOf="@+id/layout_block1" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

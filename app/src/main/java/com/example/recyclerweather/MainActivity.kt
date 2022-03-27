@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
+import android.view.View
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -22,9 +24,14 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
     internal var holderPrevious: CitiesViewHolder? = null
-
-    private lateinit var iv: ImageView
-    private lateinit var tv: TextView
+    private lateinit var etCity: EditText
+    private lateinit var ivWeatherIcon: ImageView
+    private lateinit var tvTemperature: TextView
+    private lateinit var tvHumidity: TextView
+    private lateinit var tvWindspeed: TextView
+    private lateinit var rview: RecyclerView
+    private lateinit var citiesAdapter: CitiesAdapter
+    private lateinit var cities: MutableList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,15 +49,16 @@ class MainActivity : AppCompatActivity() {
         }
         val width = (displayMetrics.widthPixels * 0.3).toInt()
 
-        val cities = resources.getStringArray(R.array.cities).toMutableList()
-        val rview = findViewById<RecyclerView>(R.id.cities)
-        val citiesAdapter = CitiesAdapter(LayoutInflater.from(this), this, width)
-        citiesAdapter.submitList(cities)
-        rview.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        rview.adapter = citiesAdapter
+        rview = findViewById(R.id.cities)
+        etCity = findViewById(R.id.city)
+        ivWeatherIcon = findViewById(R.id.weather_icon)
+        tvTemperature = findViewById(R.id.temperature)
+        tvHumidity = findViewById(R.id.humidity)
+        tvWindspeed = findViewById(R.id.windspeed)
 
-        iv = findViewById(R.id.weather_icon)
-        tv = findViewById(R.id.temperature)
+        citiesAdapter = CitiesAdapter(LayoutInflater.from(this), this, width)
+        cities = resources.getStringArray(R.array.cities).toMutableList()
+        updateAdapter()
     }
 
     internal fun updateWeather(city: String, same: Boolean) {
@@ -65,34 +73,57 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun updateAdapter() {
+        citiesAdapter.submitList(cities)
+        rview.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        rview.adapter = citiesAdapter
+    }
+
     private fun loadWeather(city: String) {
         val weatherURL = "https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${getString(R.string.api_key)}&units=metric"
 
-        var temp: String = getString(R.string.no_data)
-        var wicon: String? = null
+        var temperature: String = getString(R.string.no_data)
+        var weatherIcon: String? = null
+        var humidity: String = getString(R.string.no_data)
+        var windSpeed: String = getString(R.string.no_data)
 
         try {
             val stream = URL(weatherURL).content as InputStream
             val rawData = Scanner(stream).nextLine().trimIndent()
             val weatherData: WeatherJSON = Gson().fromJson(rawData, WeatherJSON::class.java)
-            temp = weatherData.main.temp.toInt().toString() + "°"
-            if (temp.substring(0, 1) != "-") {
-                temp = "+${temp}"
+            temperature = weatherData.main.temp.toInt().toString() + "°"
+            if (temperature.substring(0, 1) != "-" && temperature.substring(0, 1) != "0") {
+                temperature = "+${temperature}"
             }
-            wicon = weatherData.weather[0].icon
+            weatherIcon = weatherData.weather[0].icon
+            humidity = weatherData.main.humidity.toString() + "%"
+            windSpeed = weatherData.wind.speed.toInt().toString() + " m/s"
         } catch (e: FileNotFoundException) {
             this@MainActivity.runOnUiThread {
-                Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "No such city or internet connection", Toast.LENGTH_SHORT).show()
             }
         } finally {
             this@MainActivity.runOnUiThread {
-                tv.text = temp
-                if (wicon == null) {
-                    iv.setImageResource(0)
+                etCity.setText(city)
+                tvTemperature.text = temperature
+                if (weatherIcon == null) {
+                    ivWeatherIcon.setImageResource(0)
                 } else {
-                    Picasso.with(this).load("http://openweathermap.org/img/wn/${wicon}@2x.png").into(iv)
+                    Picasso.with(this).load("http://openweathermap.org/img/wn/${weatherIcon}@2x.png").into(ivWeatherIcon)
                 }
+                tvHumidity.text = humidity
+                tvWindspeed.text = windSpeed
             }
+        }
+    }
+
+    fun onEnterClick(view: View) {
+        val city = etCity.text.toString()
+        if (cities.contains(city)) {
+            // TODO -> maybe then this city should be selected in the RecyclerView
+        } else {
+            cities.add(city)
+            updateAdapter()
         }
     }
 }
