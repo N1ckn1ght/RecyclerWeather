@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">RecyclerWeather</string>
+    <string name="api_key">d6843ab8ee963f5d372296dfff62aed7</string>
+
+    <string name="error">Error</string>
+    <string name="no_data">--</string>
 
     <string-array name="cities">
         <item>Irkutsk</item>

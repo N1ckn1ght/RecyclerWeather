@@ -1,16 +1,17 @@
 package com.example.recyclerweather
 
+import android.content.Context
+import android.graphics.Color.parseColor
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 
-class CitiesAdapter (private val inflater: LayoutInflater, private val width: Int, private val padding: Int) : ListAdapter<String, CitiesViewHolder>(DIFF_CALLBACK) {
+class CitiesAdapter (private val inflater: LayoutInflater, private val context: Context, private val width: Int) : ListAdapter<String, CitiesViewHolder>(DIFF_CALLBACK) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CitiesViewHolder {
         val row: View = inflater.inflate(R.layout.item, parent, false)
-        parent.setPadding(padding, padding, padding, 0)
-        return CitiesViewHolder(row)
+        return CitiesViewHolder(row, context)
     }
 
     override fun onBindViewHolder(holder: CitiesViewHolder, position: Int) {
