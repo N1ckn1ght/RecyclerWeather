@@ -11,7 +11,7 @@ data class WeatherMain(val temp: Double, val feels_like: Double,
                        val temp_min: Double, val temp_max: Double,
                        val pressure: Int, val humidity: Int,
                        val gust: Double = 0.0, val sea_level: Int = 0, val grnd_level:Int = 0)
-data class WeatherWind(val speed: String, val deg: Int,
+data class WeatherWind(val speed: Double, val deg: Int,
                        val gust: Double = 0.0)
 data class WeatherClouds(val all: Int)
 data class WeatherSys(val type: Int, val id: Int, val country: String, val sunrise: Long, val sunset: Long)
