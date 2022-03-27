@@ -13,7 +13,7 @@ class CitiesViewHolder(itemView: View, private val context: Context) : RecyclerV
         itemView.setOnClickListener {
             tv.setBackgroundResource(R.color.black)
             tv.setTextColor(parseColor("#FFFFFFFF"))
-            (context as MainActivity).updateWeather(tv.text.toString())
+            (context as MainActivity).updateWeather(tv.text.toString(), this == (context as MainActivity).holderPrevious)
             (context as MainActivity).holderPrevious = this
         }
     }

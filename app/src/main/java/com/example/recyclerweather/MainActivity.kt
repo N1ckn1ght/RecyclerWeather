@@ -53,10 +53,12 @@ class MainActivity : AppCompatActivity() {
         tv = findViewById(R.id.temperature)
     }
 
-    internal fun updateWeather(city: String) {
-        holderPrevious?.let {
-            it.tv.setBackgroundResource(R.drawable.border)
-            it.tv.setTextColor(Color.parseColor("#FF000000"))
+    internal fun updateWeather(city: String, same: Boolean) {
+        if (!same) {
+            holderPrevious?.let {
+                it.tv.setBackgroundResource(R.drawable.border)
+                it.tv.setTextColor(Color.parseColor("#FF000000"))
+            }
         }
         GlobalScope.launch (Dispatchers.IO) {
             loadWeather(city)
@@ -73,7 +75,10 @@ class MainActivity : AppCompatActivity() {
             val stream = URL(weatherURL).content as InputStream
             val rawData = Scanner(stream).nextLine().trimIndent()
             val weatherData: WeatherJSON = Gson().fromJson(rawData, WeatherJSON::class.java)
-            temp = weatherData.main.temp
+            temp = weatherData.main.temp.toInt().toString() + "°"
+            if (temp.substring(0, 1) != "-") {
+                temp = "+${temp}"
+            }
             wicon = weatherData.weather[0].icon
         } catch (e: FileNotFoundException) {
             this@MainActivity.runOnUiThread {
